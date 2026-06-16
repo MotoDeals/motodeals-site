@@ -1,24 +1,3 @@
 {
-  "articles": [
-    {
-      "excerpt": "Articolo di esempio in bozza: non è visibile sul sito pubblico. Modificalo o eliminalo dal pannello /admin.",
-      "body": "## Benvenuto nel tuo blog\n\nQuesto è un **articolo di esempio** in stato *bozza*: non compare sul sito pubblico finché non lo imposti su **Pubblicato** dal pannello `/admin`.\n\n### Cosa puoi fare\n\n- Scrivere testo con **grassetto**, *corsivo*, titoli ed elenchi\n- Inserire [link](https://t.me/motodealsitalia) e immagini\n- Impostare categoria, tag, copertina e riassunto\n\nQuando sei pronto, crea il tuo primo articolo, mettilo su *Pubblicato* e salva. 🏍️",
-      "slug": "articolo-di-esempio",
-      "date": "2026-06-16",
-      "status": "draft",
-      "cover": "/assets/post-template.png",
-      "title": "Articolo di esempio (bozza)",
-      "tags": [
-        "esempio"
-      ],
-      "category": "Guide"
-    },
-    {
-      "status": "published",
-      "title": "CASCOESEMPIO",
-      "date": "2026-06-16",
-      "category": "CASCHI",
-      "body": "TRASPARENZA SUI LINK DI AFFILIAZIONE\n\n\n\nPartiamo dalla cosa piu importante, senza giri di parole: alcuni dei link che\n\ntrovi qui sono di affiliazione, e questo non ti costa nulla in piu. Ne un\n\ncentesimo. Il prezzo che paghi e identico, con o senza il nostro link.\n\n\n\nDetto questo, ci teniamo a spiegarti come funziona e perche lo facciamo. Perche\n\nla fiducia, tra chi condivide la passione per le due ruote, viene prima di tutto.\n\n\n\n\n\nIN PAROLE SEMPLICI: COME FUNZIONA\n\n\n\nQuando ti segnaliamo un casco, una giacca, un paio di guanti o qualsiasi altra\n\nofferta, a volte il link che ti diamo e \"tracciato\". Se decidi di acquistare\n\npassando da li, il negozio ci riconosce una piccola commissione come\n\nringraziamento per averti mandato da loro.\n\n\n\nTu paghi lo stesso identico prezzo. Noi riceviamo qualche euro che ci permette di\n\nandare avanti. Tutto qui.\n\n\n\n\n\nDOVE PUOI TROVARLI\n\n\n\nPraticamente ovunque condividiamo offerte e consigli:\n\n\n\n\\- nelle guide, recensioni e classifiche del sito (tipo le nostre comparative sui\n\n  caschi);\n\n\\- nei post sui social - Instagram, Facebook, TikTok, YouTube - compreso il link\n\n  in bio;\n\n\\- e soprattutto nel nostro canale Telegram, dove ogni giorno scoviamo le\n\n  occasioni migliori del momento.\n\n\n\n\n\nPERCHE NE ABBIAMO BISOGNO (E PERCHE TI RIGUARDA)\n\n\n\n\\[Nome del tuo brand] non e un'azienda con un magazzino e un reparto marketing:\n\nsiamo \\[appassionati di moto / un piccolo team] che passa ore a setacciare il web\n\nper trovare le offerte che valgono davvero, a provare prodotti e a scrivere guide\n\nil piu oneste possibile.\n\n\n\nLe commissioni di affiliazione sono cio che tiene in piedi tutto questo: il sito,\n\ngli strumenti che usiamo, il tempo che ci dedichiamo. Ogni volta che acquisti dai\n\nnostri link, di fatto, ci stai pagando il carburante per continuare - e ci\n\npermetti di tenere tutto gratuito per te. Per questo, sul serio: grazie.\n\n\n\n\n\nLA REGOLA CHE NON TRADIAMO MAI\n\n\n\nQui c'e un punto su cui non transigiamo: non ti consigliamo mai un prodotto solo\n\nperche ci fa guadagnare di piu.\n\n\n\nSe segnaliamo un casco o una giacca e perche pensiamo che valga la pena, punto.\n\nLa commissione non decide mai cosa finisce nelle nostre guide - lo decide se il\n\nprodotto e buono e se puo servire a chi va in moto. Se un'offerta non ci\n\nconvince, semplicemente non te la proponiamo.\n\n\n\nAllo stesso modo, ci sono cose che non promuoveremo mai, anche se rendessero:\n\nscommesse, investimenti rischiosi tipo criptovalute, alcool, tabacco e qualsiasi\n\ncontenuto non adatto a un pubblico minorenne. Non e il nostro mondo e non\n\nvogliamo che lo sia.\n\n\n\n\n\nLE CARTE IN REGOLA\n\n\n\nSeguiamo le linee guida del Digital Chart dell'Istituto dell'Autodisciplina\n\nPubblicitaria (IAP). In pratica: ogni volta che un contenuto e sponsorizzato o\n\nche ti parliamo di qualcosa che abbiamo ricevuto in omaggio, te lo diciamo\n\nchiaramente con i tag #ad o #giftedby. Niente pubblicita mascherata.\n\n\n\n\n\nHAI DUBBI?\n\n\n\nSe qualcosa non ti e chiaro, o vuoi semplicemente farci una domanda\n\nsull'argomento, scrivici pure: \\[inserisci email o link contatti]. Rispondiamo\n\nvolentieri.\n\n\n\nGrazie per essere qui, per la fiducia e per ogni clic che ci dai una mano a\n\ntenere in moto questo progetto. Ci vediamo su strada."
-    }
-  ]
+  "articles": []
 }
