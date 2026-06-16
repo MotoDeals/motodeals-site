@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Articolo — MotoDeals</title>
+<meta name="description" id="metaDesc" content="Guide e consigli moto da MotoDeals." />
+<meta property="og:type" content="article" />
+
+<link rel="icon" type="image/png" href="assets/logo-hex.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="index.html#top" aria-label="MotoDeals — home"><img class="nav-logo" src="assets/logo-horizontal.png" alt="MotoDeals" /></a>
+    <nav class="nav-links" id="navlinks">
+      <a class="link" href="index.html#cos-e">Cos'è</a>
+      <a class="link" href="index.html#post">I post</a>
+      <a class="link" href="index.html#categorie">Categorie</a>
+      <a class="link" href="index.html#partner">Partnership</a>
+      <a class="link" href="blog.html">Articoli</a>
+      <a class="btn btn-primary nav-cta" href="https://t.me/motodealsitalia" target="_blank" rel="noopener">Apri il canale</a>
+    </nav>
+    <div class="burger" id="burger" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </div>
+  </div>
+</header>
+
+<!-- ============ ARTICOLO ============ -->
+<section class="stripes" style="padding-top:clamp(40px,6vw,70px)">
+  <div class="wrap">
+    <div id="articleRoot"></div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap foot-inner">
+    <div>
+      <img class="foot-logo" src="assets/logo-horizontal.png" alt="MotoDeals" />
+      <p class="disclosure">MotoDeals pubblica link affiliati. Per l'utente il prezzo non cambia mai. I marchi citati appartengono ai rispettivi proprietari.</p>
+      <nav class="foot-links">
+        <a href="blog.html">Articoli</a>
+        <a href="index.html#disclaimer">Disclaimer Affiliazione</a>
+        <a href="https://t.me/motodealsitalia" target="_blank" rel="noopener">Canale Telegram</a>
+      </nav>
+    </div>
+    <p class="foot-note">© <span id="year"></span> MotoDeals · Offerte moto su Telegram · Le migliori occasioni per chi vive in sella.</p>
+  </div>
+</footer>
+
+<script src="articles-data.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const burger = document.getElementById('burger');
+  const links = document.getElementById('navlinks');
+  burger.addEventListener('click', () => links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+
+  // ---- helpers ----
+  const esc = (s) => String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  const fmtDate = (iso) => {
+    const d = new Date(iso + 'T00:00:00');
+    if (isNaN(d)) return esc(iso);
+    return d.toLocaleDateString('it-IT', { day:'numeric', month:'long', year:'numeric' });
+  };
+  // light sanitizer for the article body (owner-authored HTML)
+  function sanitize(html) {
+    const tpl = document.createElement('template');
+    tpl.innerHTML = html || '';
+    tpl.content.querySelectorAll('script,style,iframe,object,embed,link,meta,form').forEach(n => n.remove());
+    tpl.content.querySelectorAll('*').forEach(el => {
+      [...el.attributes].forEach(attr => {
+        const name = attr.name.toLowerCase();
+        const val = (attr.value || '').trim().toLowerCase();
+        if (name.startsWith('on')) el.removeAttribute(attr.name);
+        else if ((name === 'href' || name === 'src') && val.startsWith('javascript:')) el.removeAttribute(attr.name);
+      });
+    });
+    return tpl.innerHTML;
+  }
+
+  // ---- find article ----
+  const params = new URLSearchParams(location.search);
+  const slug = params.get('slug');
+  const preview = params.get('preview') === '1';
+  const root = document.getElementById('articleRoot');
+  const art = (window.MOTODEALS_ARTICLES || []).find(a => a && a.slug === slug);
+
+  if (!art || (art.status !== 'published' && !preview)) {
+    root.innerHTML = `
+      <div class="article" style="text-align:center;padding:40px 0">
+        <h1>Articolo non trovato</h1>
+        <p class="lead" style="margin:16px auto 28px">L'articolo che cerchi non esiste o non è più disponibile.</p>
+        <a class="btn btn-primary" href="blog.html">← Torna agli articoli</a>
+      </div>`;
+  } else {
+    document.title = art.title + ' — MotoDeals';
+    const md = document.getElementById('metaDesc');
+    if (md && art.excerpt) md.setAttribute('content', art.excerpt);
+
+    const draftBadge = (art.status !== 'published')
+      ? `<span class="badge badge-draft">Bozza · anteprima</span>` : '';
+    const tags = (art.tags || []).length
+      ? `<div class="article-tags">${art.tags.map(t => `<span class="tag">#${esc(t)}</span>`).join('')}</div>` : '';
+    const cover = art.cover
+      ? `<img class="article-cover" src="${esc(art.cover)}" alt="${esc(art.title)}" />` : '';
+
+    root.innerHTML = `
+      <article class="article">
+        <a class="back-link" href="blog.html">← Tutti gli articoli</a>
+        <h1>${esc(art.title)}</h1>
+        <div class="article-meta">
+          <span class="badge badge-cat">${esc(art.category || 'Articolo')}</span>
+          <span>${fmtDate(art.date)}</span>
+          ${draftBadge}
+        </div>
+        ${cover}
+        <div class="article-body">${sanitize(art.body)}</div>
+        ${tags}
+        <div class="article-cta">
+          <h3>Vuoi le offerte prima di tutti?</h3>
+          <p>Ogni giorno selezioniamo gli sconti migliori su caschi, abbigliamento e accessori moto, direttamente su Telegram.</p>
+          <a class="btn btn-primary" href="https://t.me/motodealsitalia" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width:20px;height:20px"><path d="M21.9 4.3 18.7 19c-.2 1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.4 13 1.6 11.5c-1-.3-1-1 .2-1.5L20.6 2.8c.9-.3 1.6.2 1.3 1.5Z"/></svg>
+            Unisciti al canale
+          </a>
+        </div>
+      </article>`;
+  }
+</script>
+</body>
+</html>

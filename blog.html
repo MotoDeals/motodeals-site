@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Articoli — MotoDeals | Guide e consigli moto</title>
+<meta name="description" content="Guide, recensioni e consigli su caschi, abbigliamento e accessori moto. Tutti gli articoli di MotoDeals, ordinati per data e categoria." />
+<meta property="og:title" content="Articoli — MotoDeals" />
+<meta property="og:description" content="Guide, recensioni e consigli su caschi, abbigliamento e accessori moto." />
+<meta property="og:type" content="website" />
+
+<link rel="icon" type="image/png" href="assets/logo-hex.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="index.html#top" aria-label="MotoDeals — home"><img class="nav-logo" src="assets/logo-horizontal.png" alt="MotoDeals" /></a>
+    <nav class="nav-links" id="navlinks">
+      <a class="link" href="index.html#cos-e">Cos'è</a>
+      <a class="link" href="index.html#post">I post</a>
+      <a class="link" href="index.html#categorie">Categorie</a>
+      <a class="link" href="index.html#partner">Partnership</a>
+      <a class="link" href="blog.html">Articoli</a>
+      <a class="btn btn-primary nav-cta" href="https://t.me/motodealsitalia" target="_blank" rel="noopener">Apri il canale</a>
+    </nav>
+    <div class="burger" id="burger" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ARCHIVIO ============ -->
+<section class="page-hero stripes">
+  <div class="wrap">
+    <span class="eyebrow">📰 Resoconto articoli</span>
+    <h1 class="title" style="margin-top:16px">Articoli <span class="orange">MotoDeals</span></h1>
+    <p class="lead">Guide, recensioni e consigli su caschi, abbigliamento e accessori moto. Tutto quello che ti serve per scegliere bene — e risparmiare.</p>
+    <div class="cat-filter" id="catFilter"></div>
+  </div>
+</section>
+
+<div class="road-wrap"><div class="wrap"><div class="road"></div></div></div>
+
+<!-- ============ GRIGLIA ARTICOLI ============ -->
+<section style="padding-top:clamp(36px,5vw,60px)">
+  <div class="wrap">
+    <div class="article-grid" id="articleGrid"></div>
+    <p class="empty-state" id="emptyState" style="display:none">Nessun articolo pubblicato in questa categoria. Torna presto! 🏍️</p>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap foot-inner">
+    <div>
+      <img class="foot-logo" src="assets/logo-horizontal.png" alt="MotoDeals" />
+      <p class="disclosure">MotoDeals pubblica link affiliati. Per l'utente il prezzo non cambia mai. I marchi citati appartengono ai rispettivi proprietari.</p>
+      <nav class="foot-links">
+        <a href="blog.html">Articoli</a>
+        <a href="index.html#disclaimer">Disclaimer Affiliazione</a>
+        <a href="https://t.me/motodealsitalia" target="_blank" rel="noopener">Canale Telegram</a>
+      </nav>
+    </div>
+    <p class="foot-note">© <span id="year"></span> MotoDeals · Offerte moto su Telegram · Le migliori occasioni per chi vive in sella.</p>
+  </div>
+</footer>
+
+<script src="articles-data.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // mobile menu
+  const burger = document.getElementById('burger');
+  const links = document.getElementById('navlinks');
+  burger.addEventListener('click', () => links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+
+  // ---- helpers ----
+  const esc = (s) => String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  const fmtDate = (iso) => {
+    const d = new Date(iso + 'T00:00:00');
+    if (isNaN(d)) return esc(iso);
+    return d.toLocaleDateString('it-IT', { day:'numeric', month:'long', year:'numeric' });
+  };
+
+  // ---- data ----
+  const ALL = (window.MOTODEALS_ARTICLES || [])
+    .filter(a => a && a.status === 'published')
+    .sort((a,b) => (b.date || '').localeCompare(a.date || ''));
+
+  const grid = document.getElementById('articleGrid');
+  const empty = document.getElementById('emptyState');
+  const catFilter = document.getElementById('catFilter');
+
+  // ---- category chips ----
+  const categories = [...new Set(ALL.map(a => a.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+  let activeCat = 'Tutti';
+
+  function renderChips() {
+    const cats = ['Tutti', ...categories];
+    catFilter.innerHTML = cats.map(c =>
+      `<button type="button" class="chip${c === activeCat ? ' active' : ''}" data-cat="${esc(c)}">${esc(c)}</button>`
+    ).join('');
+    catFilter.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => { activeCat = chip.dataset.cat; renderChips(); renderGrid(); });
+    });
+  }
+
+  // ---- article cards ----
+  function renderGrid() {
+    const list = activeCat === 'Tutti' ? ALL : ALL.filter(a => a.category === activeCat);
+    if (!list.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    grid.innerHTML = list.map(a => `
+      <a class="article-card" href="articolo.html?slug=${encodeURIComponent(a.slug)}">
+        <img class="cover" src="${esc(a.cover)}" alt="${esc(a.title)}" loading="lazy" />
+        <div class="body">
+          <div class="meta">
+            <span class="badge badge-cat">${esc(a.category || 'Articolo')}</span>
+            <span>${fmtDate(a.date)}</span>
+          </div>
+          <h3>${esc(a.title)}</h3>
+          <p>${esc(a.excerpt || '')}</p>
+          <span class="read">Leggi l'articolo →</span>
+        </div>
+      </a>`).join('');
+  }
+
+  renderChips();
+  renderGrid();
+</script>
+</body>
+</html>
