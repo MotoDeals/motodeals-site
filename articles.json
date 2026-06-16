@@ -1,15 +1,3 @@
 {
-  "articles": [
-    {
-      "title": "Articolo di esempio (bozza)",
-      "slug": "articolo-di-esempio",
-      "date": "2026-06-16",
-      "category": "Guide",
-      "tags": ["esempio"],
-      "cover": "/assets/post-template.png",
-      "excerpt": "Articolo di esempio in bozza: non è visibile sul sito pubblico. Modificalo o eliminalo dal pannello /admin.",
-      "status": "draft",
-      "body": "## Benvenuto nel tuo blog\n\nQuesto è un **articolo di esempio** in stato *bozza*: non compare sul sito pubblico finché non lo imposti su **Pubblicato** dal pannello `/admin`.\n\n### Cosa puoi fare\n\n- Scrivere testo con **grassetto**, *corsivo*, titoli ed elenchi\n- Inserire [link](https://t.me/motodealsitalia) e immagini\n- Impostare categoria, tag, copertina e riassunto\n\nQuando sei pronto, crea il tuo primo articolo, mettilo su *Pubblicato* e salva. 🏍️"
-    }
-  ]
+  "articles": []
 }
