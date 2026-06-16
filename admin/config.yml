@@ -1,0 +1,46 @@
+# =====================================================================
+# Configurazione Decap CMS — pannello di gestione articoli MotoDeals
+# Login via GitHub (gestito da Netlify). Le modifiche vengono salvate
+# direttamente nel repository: Netlify ripubblica il sito da solo.
+# =====================================================================
+
+backend:
+  name: github
+  repo: MotoDeals/motodeals-site
+  branch: main
+
+# Lingua dell'interfaccia
+locale: "it"
+
+# Link "Vai al sito" dentro il pannello
+site_url: https://motodeals.netlify.app
+display_url: https://motodeals.netlify.app
+
+# Dove vengono salvate le immagini caricate dal pannello
+media_folder: "assets/uploads"
+public_folder: "/assets/uploads"
+
+collections:
+  - name: "blog"
+    label: "Articoli"
+    files:
+      - name: "articoli"
+        label: "Tutti gli articoli"
+        file: "articles.json"
+        description: "Aggiungi, modifica, pubblica o elimina gli articoli del blog. Premi 'Save' per salvare."
+        fields:
+          - name: "articles"
+            label: "Articoli"
+            label_singular: "Articolo"
+            widget: "list"
+            summary: "{{fields.title}}  ·  {{fields.status}}"
+            fields:
+              - { name: "title", label: "Titolo", widget: "string" }
+              - { name: "slug", label: "Slug (URL)", widget: "string", required: false, hint: "Lascia vuoto per generarlo dal titolo. Usa minuscole-con-trattini, es. migliori-caschi-2026." }
+              - { name: "date", label: "Data", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+              - { name: "category", label: "Categoria", widget: "string", required: false, hint: "Es. Caschi, Abbigliamento, Accessori." }
+              - { name: "tags", label: "Tag", widget: "list", required: false }
+              - { name: "cover", label: "Copertina", widget: "image", required: false, hint: "Immagine in cima all'articolo e nelle anteprime." }
+              - { name: "excerpt", label: "Riassunto", widget: "text", required: false, hint: "1-2 frasi mostrate nelle anteprime del blog." }
+              - { name: "status", label: "Stato", widget: "select", options: ["draft", "published"], default: "draft", hint: "Solo 'published' è visibile sul sito pubblico." }
+              - { name: "body", label: "Corpo dell'articolo", widget: "markdown" }

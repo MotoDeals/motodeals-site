@@ -71,7 +71,6 @@
   </div>
 </footer>
 
-<script src="articles-data.js"></script>
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -90,18 +89,17 @@
     if (isNaN(d)) return esc(iso);
     return d.toLocaleDateString('it-IT', { day:'numeric', month:'long', year:'numeric' });
   };
+  const slugify = (s) => String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,80);
 
-  // ---- data ----
-  const ALL = (window.MOTODEALS_ARTICLES || [])
-    .filter(a => a && a.status === 'published')
-    .sort((a,b) => (b.date || '').localeCompare(a.date || ''));
-
+  // ---- elementi ----
   const grid = document.getElementById('articleGrid');
   const empty = document.getElementById('emptyState');
   const catFilter = document.getElementById('catFilter');
 
-  // ---- category chips ----
-  const categories = [...new Set(ALL.map(a => a.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+  // ---- stato ----
+  let ALL = [];
+  let categories = [];
   let activeCat = 'Tutti';
 
   function renderChips() {
@@ -114,13 +112,12 @@
     });
   }
 
-  // ---- article cards ----
   function renderGrid() {
     const list = activeCat === 'Tutti' ? ALL : ALL.filter(a => a.category === activeCat);
     if (!list.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
     empty.style.display = 'none';
     grid.innerHTML = list.map(a => `
-      <a class="article-card" href="articolo.html?slug=${encodeURIComponent(a.slug)}">
+      <a class="article-card" href="articolo.html?slug=${encodeURIComponent(a.slug || slugify(a.title))}">
         <img class="cover" src="${esc(a.cover)}" alt="${esc(a.title)}" loading="lazy" />
         <div class="body">
           <div class="meta">
@@ -134,8 +131,18 @@
       </a>`).join('');
   }
 
-  renderChips();
-  renderGrid();
+  // ---- carica i dati da articles.json (gestito dal CMS) ----
+  fetch('articles.json?_=' + Date.now(), { cache: 'no-store' })
+    .then(r => r.ok ? r.json() : { articles: [] })
+    .then(data => {
+      ALL = (data.articles || [])
+        .filter(a => a && a.status === 'published')
+        .sort((a,b) => (b.date || '').localeCompare(a.date || ''));
+      categories = [...new Set(ALL.map(a => a.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+      renderChips();
+      renderGrid();
+    })
+    .catch(() => { renderChips(); empty.style.display = 'block'; });
 </script>
 </body>
 </html>

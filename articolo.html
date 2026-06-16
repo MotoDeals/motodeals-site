@@ -56,7 +56,7 @@
   </div>
 </footer>
 
-<script src="articles-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -90,21 +90,26 @@
     return tpl.innerHTML;
   }
 
-  // ---- find article ----
+  // ---- slug & markdown ----
+  const slugify = (s) => String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,80);
+  const toHtml = (md) => (window.marked && typeof marked.parse === 'function') ? marked.parse(md || '') : (md || '');
+
   const params = new URLSearchParams(location.search);
   const slug = params.get('slug');
   const preview = params.get('preview') === '1';
   const root = document.getElementById('articleRoot');
-  const art = (window.MOTODEALS_ARTICLES || []).find(a => a && a.slug === slug);
 
-  if (!art || (art.status !== 'published' && !preview)) {
+  function notFound() {
     root.innerHTML = `
       <div class="article" style="text-align:center;padding:40px 0">
         <h1>Articolo non trovato</h1>
         <p class="lead" style="margin:16px auto 28px">L'articolo che cerchi non esiste o non è più disponibile.</p>
         <a class="btn btn-primary" href="blog.html">← Torna agli articoli</a>
       </div>`;
-  } else {
+  }
+
+  function render(art) {
     document.title = art.title + ' — MotoDeals';
     const md = document.getElementById('metaDesc');
     if (md && art.excerpt) md.setAttribute('content', art.excerpt);
@@ -126,7 +131,7 @@
           ${draftBadge}
         </div>
         ${cover}
-        <div class="article-body">${sanitize(art.body)}</div>
+        <div class="article-body">${sanitize(toHtml(art.body))}</div>
         ${tags}
         <div class="article-cta">
           <h3>Vuoi le offerte prima di tutti?</h3>
@@ -138,6 +143,15 @@
         </div>
       </article>`;
   }
+
+  fetch('articles.json?_=' + Date.now(), { cache: 'no-store' })
+    .then(r => r.ok ? r.json() : { articles: [] })
+    .then(data => {
+      const art = (data.articles || []).find(a => a && (a.slug || slugify(a.title)) === slug);
+      if (!art || (art.status !== 'published' && !preview)) notFound();
+      else render(art);
+    })
+    .catch(notFound);
 </script>
 </body>
 </html>
