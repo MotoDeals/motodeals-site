@@ -354,6 +354,22 @@
   .article-body figure{margin:22px 0}
   .article-body figcaption{color:var(--muted-2);font-size:13.5px;text-align:center;margin-top:8px}
 
+  /* tabelle dentro gli articoli (es. resoconti offerte) */
+  .article-body .table-scroll{overflow-x:auto;margin:20px 0;border-radius:12px;-webkit-overflow-scrolling:touch}
+  .article-body table{width:100%;border-collapse:collapse;font-size:13.5px;
+    background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .article-body th,.article-body td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+  .article-body th{background:var(--surface-2);color:var(--muted);font-weight:600;
+    font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+  .article-body tr:last-child td{border-bottom:none}
+  .article-body td.n{color:var(--muted-2)}
+  .article-body td.p{font-weight:700;color:var(--orange);white-space:nowrap}
+  .article-body td.old{color:var(--muted-2);text-decoration:line-through;white-space:nowrap}
+  .article-body td.disc{font-weight:700;color:var(--green);white-space:nowrap}
+  .article-body td.t{min-width:240px;max-width:420px}
+  .article-body table a{color:var(--orange);font-weight:600;white-space:nowrap;text-decoration:none}
+  .article-body table a:hover{color:var(--orange-2)}
+
   /* article footer CTA */
   .article-cta{margin-top:48px;background:
       radial-gradient(120% 140% at 100% 0%,rgba(255,138,30,.18),transparent 55%),
